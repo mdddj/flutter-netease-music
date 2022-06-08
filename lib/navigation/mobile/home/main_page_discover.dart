@@ -7,14 +7,14 @@ import 'package:quiet/repository.dart';
 import '../../../providers/navigator_provider.dart';
 import '../../../providers/personalized_playlist_provider.dart';
 import '../../common/navigation_target.dart';
+import '../playlists/page_daily_playlist.dart';
 
 class MainPageDiscover extends StatefulWidget {
   @override
   State<StatefulWidget> createState() => CloudPageState();
 }
 
-class CloudPageState extends State<MainPageDiscover>
-    with AutomaticKeepAliveClientMixin {
+class CloudPageState extends State<MainPageDiscover> with AutomaticKeepAliveClientMixin {
   @override
   bool get wantKeepAlive => true;
 
@@ -44,12 +44,11 @@ class _NavigationLine extends ConsumerWidget {
           _ItemNavigator(
             Icons.radio,
             "私人FM",
-            () => ref
-                .read(navigatorProvider.notifier)
-                .navigate(NavigationTargetFmPlaying()),
+            () => ref.read(navigatorProvider.notifier).navigate(NavigationTargetFmPlaying()),
           ),
           _ItemNavigator(Icons.today, "每日推荐", () {
-            context.secondaryNavigator!.pushNamed(pageDaily);
+            // context.secondaryNavigator!.pushNamed(pageDaily);
+            Navigator.push(context, MaterialPageRoute(builder: (_) => DailyPlaylistPage()));
           }),
           _ItemNavigator(Icons.show_chart, "排行榜", () {
             context.secondaryNavigator!.pushNamed(pageLeaderboard);
@@ -77,10 +76,7 @@ class _Header extends StatelessWidget {
           const Padding(padding: EdgeInsets.only(left: 8)),
           Text(
             text,
-            style: Theme.of(context)
-                .textTheme
-                .subtitle1!
-                .copyWith(fontWeight: FontWeight.w800),
+            style: Theme.of(context).textTheme.subtitle1!.copyWith(fontWeight: FontWeight.w800),
           ),
           const Icon(Icons.chevron_right),
         ],
@@ -136,16 +132,13 @@ class _SectionPlaylist extends ConsumerWidget {
     return snapshot.when(
       data: (list) {
         return LayoutBuilder(builder: (context, constraints) {
-          assert(constraints.maxWidth.isFinite,
-              "can not layout playlist item in infinite width container.");
+          assert(constraints.maxWidth.isFinite, "can not layout playlist item in infinite width container.");
           final parentWidth = constraints.maxWidth - 8;
           const int count = /* false ? 6 : */ 3;
-          final double width =
-              (parentWidth ~/ count).toDouble().clamp(80.0, 200.0);
+          final double width = (parentWidth ~/ count).toDouble().clamp(80.0, 200.0);
           final double spacing = (parentWidth - width * count) / (count + 1);
           return Padding(
-            padding:
-                EdgeInsets.symmetric(horizontal: 4 + spacing.roundToDouble()),
+            padding: EdgeInsets.symmetric(horizontal: 4 + spacing.roundToDouble()),
             child: Wrap(
               spacing: spacing,
               children: list.map<Widget>((p) {
@@ -207,9 +200,7 @@ class _PlayListItemView extends ConsumerWidget {
     }
 
     return InkWell(
-      onTap: () => ref
-          .read(navigatorProvider.notifier)
-          .navigate(NavigationTargetPlaylist(playlist.id)),
+      onTap: () => ref.read(navigatorProvider.notifier).navigate(NavigationTargetPlaylist(playlist.id)),
       onLongPress: onLongPress,
       child: Container(
         width: width,
@@ -224,8 +215,7 @@ class _PlayListItemView extends ConsumerWidget {
                 child: AspectRatio(
                   aspectRatio: 1,
                   child: FadeInImage(
-                    placeholder:
-                        const AssetImage("assets/playlist_playlist.9.png"),
+                    placeholder: const AssetImage("assets/playlist_playlist.9.png"),
                     image: CachedImage(playlist.picUrl),
                     fit: BoxFit.cover,
                   ),

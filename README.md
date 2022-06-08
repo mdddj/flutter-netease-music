@@ -60,3 +60,7 @@ debian:
 | ![music_selection](https://boyan01.github.io/quiet/music_selection.png) | ![playlist_selector](https://boyan01.github.io/quiet/playlist_selector.jpg) |                                                               |     ![每日推荐](https://boyan01.github.io/quiet/daily_playlist.png)     |
 |     ![ios](https://boyan01.github.io/quiet/ios_playlist_detail.jpg)     |           ![ios](https://boyan01.github.io/quiet/user_detail.png)           |                                                               |                                                                     |
 
+
+```bash
+flutter build apk -Xlint:deprecation -Xlint:unchecked
+```
